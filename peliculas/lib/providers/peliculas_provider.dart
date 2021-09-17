@@ -9,13 +9,7 @@ class PeliculasProvider{
   String _url ='api.themoviedb.org';
   String _language = 'es';
 
-  
-  Future<List<Pelicula>> getEnCines() async{
-    final url = Uri.https(_url, '3/movie/now_playing', { //este metodo le setea automaticamente el https
-      'api_key' : _apikey,
-      'language' : _language
-    }); 
-
+  Future<List<Pelicula>> _procesarRespuesta(Uri url) async{
     final respuesta = await http.get(url);
 
     if(respuesta.statusCode == 200){
@@ -30,15 +24,31 @@ class PeliculasProvider{
         listaDePeliculas.add(Pelicula.fromJsonMap(pelicula));
       }
 
-      print(listaDePeliculas); //me retorna una lista de instancias de Pelicula
-
-
-    return listaDePeliculas;
+      return listaDePeliculas;
 
     }else{
       throw Exception('Falló la consulta');
     }
+  }
 
+  
+  Future<List<Pelicula>> getEnCines() async{
+    final url = Uri.https(_url, '3/movie/now_playing', { //este metodo le setea automaticamente el https
+      'api_key' : _apikey,
+      'language' : _language
+    }); 
+
+    return await _procesarRespuesta(url);
+
+  }
+
+  Future<List<Pelicula>> getPopulares() async{
+    final url = Uri.https(_url, '3/movie/popular', { //este metodo le setea automaticamente el https
+      'api_key' : _apikey,
+      'language' : _language
+    }); 
+
+    return await _procesarRespuesta(url);
 
   }
 

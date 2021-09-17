@@ -68,7 +68,7 @@ class Pelicula {
     return Pelicula( 
       adult               : json['adult'] as bool,
       backdropPath        : json['backdrop_path'] as String,
-      genreIds            : json['genre_ids'].cast<int>(),//para que sean esteros
+      genreIds            : json['genre_ids'].cast<int>(),//para que sean enteros
       id                  : json['id'] as int,
       originalLanguage    : json['original_language'] as String,
       originalTitle       : json['original_title'] as String,

@@ -26,15 +26,15 @@ class CardSwiper extends StatelessWidget {
             child: FadeInImage(
               placeholder: AssetImage('assets/img/no-image.jpg'),
               image: NetworkImage( peliculas[index].getPosterImg()),
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             )
           );
         },
         indicatorLayout: PageIndicatorLayout.SCALE,
         itemCount: peliculas.length,
         layout: SwiperLayout.STACK,
-        itemWidth: _screenSize.width * 0.7, //el 70% del ancho
-        itemHeight: _screenSize.height *0.5, //el 50% del ancho
+        itemWidth: _screenSize.width * 0.5, //el 50% del ancho
+        itemHeight: _screenSize.height *0.35, //el 40% del alto
         
       )
     );
