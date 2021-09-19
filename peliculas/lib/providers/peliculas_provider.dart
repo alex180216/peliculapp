@@ -11,6 +11,7 @@ class PeliculasProvider{
   String _language = 'es';
 
   int _popularesPage = 0; //para el Stream
+  bool _cargando = false;
 
   //la info del stream
   List<Pelicula> _populares = [];
@@ -63,7 +64,15 @@ class PeliculasProvider{
   }
 
   Future<List<Pelicula>> getPopulares() async{
+    
+    if(_cargando) return []; //si esta cargando, retorname una lista vacia,
+
+    //si no esta cargando, haz la solicitud. Esto es para evitar que haga solicitudes http antes de llegar
+    //al final de la lista de peliculas, y, ademas,ponme _cargando como true
+    _cargando = true;
     _popularesPage++;
+
+    print('Cargando siguientes...');
 
     final url = Uri.https(_url, '3/movie/popular', { //este metodo le setea automaticamente el https
       'api_key' : _apikey,
@@ -77,7 +86,9 @@ class PeliculasProvider{
 
     _populares.addAll(resp);//addAll() es una funcion para insertar listas, y resp es una lista
     popularesSink(_populares);//añadiendo info al stream medio el sink
-
+    
+    //una vez hecha la solicitud, ponme a _cargando en false
+    _cargando = false;
 
     return resp;
   }

@@ -28,15 +28,21 @@ class MovieHorizontal extends StatelessWidget {
 
         //cargar siguientes peliculas
         //print('cargar siguientes');
-        siguientePagina();
+        siguientePagina();//ejecuta el get populares con la siguiente pagina
       }
     });
 
     return Container(
       height: _screenSize.height * 0.3, //el 30%
-      child: PageView(
+     
+     //optimizando que dibuje las cartas solo cuando estas son visualizadas en la pantalla
+      child: PageView.builder(
+        itemBuilder: (context, i){
+          return _tarjeta(context, peliculas[i]);
+        },
+        itemCount: peliculas.length, //para que el sepa cuantas peliculas van cargandose por consulta
         controller:_pageController,
-        children: _tarjetas(context),
+        //children: _tarjetas(context),
         pageSnapping: false, //para quitarle el efecto pegajoso en el movimiento(scroll) de las tarjetas
       ),  
     );
@@ -67,5 +73,30 @@ class MovieHorizontal extends StatelessWidget {
         ),
       );
     }).toList();
+  }
+
+  Widget _tarjeta(BuildContext context, Pelicula pelicula){
+    return Container(
+        margin: EdgeInsets.only(right: 15.0),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: FadeInImage(
+                image: NetworkImage( pelicula.getPosterImg()),
+                placeholder: AssetImage('assets/img/no-image.jpg'),
+                fit: BoxFit.cover,
+                height: 160.0,
+              ),
+            ),
+            SizedBox(height: 3,),
+            Text(
+              pelicula.title, 
+              overflow: TextOverflow.ellipsis,//coloca los 3 puntos de continuar, si el texto no cabe
+              style: Theme.of(context).textTheme.caption,
+            )
+          ],
+        ),
+      );
   }
 }
