@@ -75,8 +75,9 @@ class MovieHorizontal extends StatelessWidget {
     }).toList();
   }
 
+//widget creado para el item builder, en la optimizacion del renderizado
   Widget _tarjeta(BuildContext context, Pelicula pelicula){
-    return Container(
+    final tarjetaContainer =  Container(
         margin: EdgeInsets.only(right: 15.0),
         child: Column(
           children: [
@@ -97,6 +98,16 @@ class MovieHorizontal extends StatelessWidget {
             )
           ],
         ),
+      );
+
+
+      //el gestureDetector es para asignar eventos a los widgets
+      return GestureDetector(
+        child: tarjetaContainer, //se le indica que widget va a evaluar
+        onTap: (){ //y la accion
+          //print('Id de la pelicula: ${pelicula.id}');
+          Navigator.pushNamed(context, 'detalle', arguments: pelicula); 
+        },
       );
   }
 }
