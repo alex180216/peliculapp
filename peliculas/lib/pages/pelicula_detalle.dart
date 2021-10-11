@@ -15,7 +15,7 @@ class PeliculaDetalle extends StatelessWidget {
         //los slivers son como los children y hacen ciertas cosas con el customScrollView
         slivers: [
           _crearAppbar(pelicula),
-          SliverList(//elementos normales, es como un listView, pero en lugar del children, tiene un children
+          SliverList(//elementos normales, es como un listView, pero en lugar del children, tiene un delegation
             delegate: SliverChildListDelegate(
               [
                 SizedBox(height: 10.0,),

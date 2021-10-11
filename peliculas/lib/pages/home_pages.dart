@@ -11,6 +11,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final _mediaQuery = MediaQuery.of(context);
+    Size _size = _mediaQuery.size;
+
     //stream
     peliculasProvider.getPopulares();
 
@@ -29,36 +32,40 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _swiperTarjetas(),
-            _footer(context),
+            _swiperTarjetas(_size),
+            _footer(context, _size),
           ],
         ),
       ),
     );
   }
-  Widget _swiperTarjetas() {
+  Widget _swiperTarjetas(Size _size) {
  
-    return FutureBuilder(
-      future: peliculasProvider.getEnCines(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+    return Container(
+      
+      child: FutureBuilder(
+        future: peliculasProvider.getEnCines(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
 
-        if(snapshot.hasData){ //cuando haya data del future, muestrala
-          return CardSwiper(peliculas: snapshot.data);
+          if(snapshot.hasData){ //cuando haya data del future, muestrala
+            return CardSwiper(peliculas: snapshot.data);
 
-        }else{ //sino, muestra un loader
-          return Container(
-            child: Center(
-              child: CircularProgressIndicator()
-            )
-          );
+          }else{ //sino, muestra un loader
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator()
+              )
+            );
+          }
+
         }
-
-      }
+      ),
     );
   }
 
-  Widget _footer(BuildContext context){
+  Widget _footer(BuildContext context, Size _size){
     return Container(
+      height: _size.height * 0.35,
       width: double.infinity, //para que agarre todo el espacio de ancho
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
