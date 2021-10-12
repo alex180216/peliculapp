@@ -99,9 +99,9 @@ class PeliculaDetalle extends StatelessWidget {
     return FutureBuilder(
       future: peliProvider.getCast(pelicula.id.toString()),
       builder: (context, AsyncSnapshot<List> snapshot){
-        print(snapshot); //esto retorna una lista de instancias de actores
+        //print(snapshot); //esto retorna una lista de instancias de actores
         if(snapshot.hasData){ //cuando haya data del future, muestrala
-          return _crearActoresPageView(snapshot.data);
+          return _crearActoresPageView(snapshot.data as List<Actor>, context);
         }else{ //sino, muestra un loader
           return Center(
             child: CircularProgressIndicator() ,
@@ -111,18 +111,40 @@ class PeliculaDetalle extends StatelessWidget {
     );
   }
 
-  Widget _crearActoresPageView(List? actores) {
-    print(actores);
+  Widget _crearActoresPageView(List<Actor> actores, BuildContext context) {
+    //print(actores);
     return SizedBox(
       height: 200.0,
       child: PageView.builder(
+        pageSnapping: false,
         controller: PageController(viewportFraction: 0.3, initialPage: 1),
-        itemCount: actores!.length,
-        itemBuilder:(context, i){
-          return Text('Hola');
-        }
+        itemCount: actores.length,
+        itemBuilder:(context, i) => _actorTarjeta(actores[i], context)
       ),
     );
     
+  }
+
+  Widget _actorTarjeta(Actor actor, BuildContext context){
+
+    final _sizeScreen = MediaQuery.of(context).size;
+
+    return Container(
+      padding:EdgeInsets.symmetric(horizontal: _sizeScreen.width * 0.01),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(_sizeScreen.width * 0.03),
+            child: FadeInImage(
+              image: NetworkImage(actor.getFoto()),
+              placeholder: AssetImage('assets/img/no-image.jpg'),
+              height: _sizeScreen.height * 0.25,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Text(actor.name, overflow: TextOverflow.ellipsis,)
+        ],
+      ),
+    );
   }
 }
