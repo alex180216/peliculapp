@@ -30,6 +30,10 @@ class Peliculas{
 
 
 class Pelicula {
+//agregamos el nuevo id para que funcione el HeroAmination
+
+  String? uniqueId;
+
   final bool adult;
   final String backdropPath;
   final List<int> genreIds;
@@ -45,6 +49,7 @@ class Pelicula {
   final int voteCount;
 
   Pelicula({
+    this.uniqueId,
     required this.adult,
     required this.backdropPath,
     required this.genreIds,

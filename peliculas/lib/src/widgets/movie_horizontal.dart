@@ -77,17 +77,23 @@ class MovieHorizontal extends StatelessWidget {
 
 //widget creado para el item builder, en la optimizacion del renderizado
   Widget _tarjeta(BuildContext context, Pelicula pelicula){
+
+    pelicula.uniqueId = '${pelicula.id}-poster';
+
     final tarjetaContainer =  Container(
         margin: EdgeInsets.only(right: 15.0),
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: FadeInImage(
-                image: NetworkImage( pelicula.getPosterImg()),
-                placeholder: AssetImage('assets/img/no-image.jpg'),
-                fit: BoxFit.cover,
-                height: 155.0,
+            Hero(
+              tag: pelicula.uniqueId as Object , //es un id unico que representa a la tarjeta en toda la app
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: FadeInImage(
+                  image: NetworkImage( pelicula.getPosterImg()),
+                  placeholder: AssetImage('assets/img/no-image.jpg'),
+                  fit: BoxFit.cover,
+                  height: 155.0,
+                ),
               ),
             ),
             SizedBox(height: 3,),
