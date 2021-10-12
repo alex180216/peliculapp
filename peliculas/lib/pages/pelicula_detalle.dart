@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/models/actores_model.dart';
 import 'package:peliculas/models/pelicula_model.dart';
+import 'package:peliculas/providers/peliculas_provider.dart';
 
 class PeliculaDetalle extends StatelessWidget {
 
+  final List<Actor> actores = [];
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,8 @@ class PeliculaDetalle extends StatelessWidget {
               [
                 SizedBox(height: 10.0,),
                 _posterTitulo(context, pelicula),
-                _descripcion(pelicula)
+                _descripcion(pelicula),
+                _crearCasting(pelicula),
               ]
             ),
           )
@@ -86,5 +90,39 @@ class PeliculaDetalle extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical:20.0),
       child: Text(pelicula.overview, textAlign: TextAlign.justify,)
     );
+  }
+
+  Widget _crearCasting(Pelicula pelicula) {
+    
+    final peliProvider = new PeliculasProvider();
+
+    return FutureBuilder(
+      future: peliProvider.getCast(pelicula.id.toString()),
+      builder: (context, AsyncSnapshot<List> snapshot){
+        print(snapshot); //esto retorna una lista de instancias de actores
+        if(snapshot.hasData){ //cuando haya data del future, muestrala
+          return _crearActoresPageView(snapshot.data);
+        }else{ //sino, muestra un loader
+          return Center(
+            child: CircularProgressIndicator() ,
+          );
+        }
+      }
+    );
+  }
+
+  Widget _crearActoresPageView(List? actores) {
+    print(actores);
+    return SizedBox(
+      height: 200.0,
+      child: PageView.builder(
+        controller: PageController(viewportFraction: 0.3, initialPage: 1),
+        itemCount: actores!.length,
+        itemBuilder:(context, i){
+          return Text('Hola');
+        }
+      ),
+    );
+    
   }
 }

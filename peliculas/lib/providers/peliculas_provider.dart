@@ -95,17 +95,26 @@ class PeliculasProvider{
   }
 
   Future<List<Actor>> getCast(String peliId) async{
-    final url = Uri.https(_url, '3/movie/$peliId/credits',{
+    final url = Uri.https(_url, '3/movie/$peliId/credits', {
       'api_key' : _apikey,
       'language' : _language,
     });
 
     final resp = await http.get(url);
-    final decodedData = json.decode(resp.body); //aqui toma el body y lo transforma en un Map
 
-    final cast = new Cast.fromJsonList(decodedData['cast']);
+    if(resp.statusCode == 200){
+      Map<String, dynamic> decodedData = json.decode(resp.body);
 
-    return cast.actores;
-  }
+      List<Actor> listaDeActores = [];
+
+      for(var item in decodedData['cast']){
+        listaDeActores.add(Actor.fromJsonMap(item));
+      }
+      return listaDeActores;
+    }else{
+      throw Exception('Falló la consulta');
+    }
+
+  } 
 
 }
